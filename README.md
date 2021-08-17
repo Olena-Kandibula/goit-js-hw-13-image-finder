@@ -56,3 +56,19 @@ npm run dev
 - Изображения добавляйте в папку `src/images`, заранее оптимизировав их. Сборщик просто копирует
   используемые изображения чтобы не нагружать систему оптимизацией картинок, так как на слабых
   компьютерах это может занять много времени.
+
+  ////////// // Проверка версии Node.js node -v
+
+// Проверка версии npm npm -v
+
+// Установка модулей в проект и создание package.json\*= npm init npm init -y
+
+// Установка всех пакетов с файла, если уже есть package.json= npm install
+
+//Установка Percel в проект= npm install parcel-bundler --save-dev
+
+//Установка шаблонизатора= handlebars npm install --save-dev parcel-plugin-handlebars-precompile
+
+/////
+
+ <!-- //Delete favicon add in head   <link rel="icon" href="data:,"> -->
