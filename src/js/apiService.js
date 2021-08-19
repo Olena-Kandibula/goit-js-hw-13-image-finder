@@ -30,8 +30,8 @@ export default class ImgApiService {
             // },
         // };
         
-        const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&page=${this.page}&per_page=12&fields=id`
-        // const url = `https://pixabay.com/api/?key=22960570-8de4834e5e1a62c8570402763&q=cat&image_type=photo&orientation=horizontal&page=${this.page}&per_page=12`
+        // const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&page=${this.page}&per_page=12&fields=id`
+         const url = 'https://pixabay.com/api/?key=22960570-8de4834e5e1a62c8570402763&q=dog&image_type=photo&orientation=horizontal&page=1&per_page=12'
                 
         // return fetch(url, options)
             return fetch(url)
