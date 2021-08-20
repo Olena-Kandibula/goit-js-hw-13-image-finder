@@ -1,102 +1,100 @@
 import creatDomElements from './create-dom-elements';
-// import {creatDomElements, creatLoadMoreBtn} from './create-dom-elements'
 import ImgApiService from './apiService';
 import imgTmpl from '../templates/imgTmpl.hbs';
+import  onAlertErrorInput from './notification';
+
 creatDomElements()
 
 const refs = {
+    inputEl:document.querySelector('.input'),
     searchFormEl: document.querySelector('#search-form'),    
     galleryEl: document.querySelector('.gallery'),
+    searchBtnEl:document.querySelector('.btn-submit'),
     loadMoreBtnEl: document.querySelector('.btn-more')
 }
 
 const imagesApiService = new ImgApiService;
+
 refs.searchFormEl.addEventListener('submit', onSearch);
 refs.loadMoreBtnEl.addEventListener('click', onLoadMore);
 
-console.log(imagesApiService)
+refs.inputEl.addEventListener('input', onSwitchSearchBtn);
+refs.inputEl.addEventListener('keydown', onControlInput);
+
+
 
 function onSearch(e) {
      e.preventDefault();     
     
+    onSearchBtControl()
+    imagesApiService.resetPage();
+    
     imagesApiService.query = e.currentTarget.elements.query.value;
     imagesApiService.resetPage();
-    console.log(imagesApiService.query);
+    onClearGallery()   
     
-    imagesApiService.fetchImg()
-    .then(onShowGallery)
+    imagesApiService
+        .fetchImg()
+        .then(onShowGallery)
     
-    
+}
+function onShowGallery(images) {      
+   
+    if (images.length > 0 || imagesApiService.page === 42 ) {
+        appendImagesMarkup(images)
+        onRemoveLoadBtn()        
+    } else {
+         onAlertErrorInput() 
+    }
 }
 
-function onShowGallery(images) {
-    console.log(images)
-    refs.galleryEl.innerHTML = imgTmpl(countries);
-    
-}
 
 function onLoadMore() {
-    console.log('load more')
-    imagesApiService.fetchImg()
+    
+    imagesApiService.incrementPage();    
+    imagesApiService.fetchImg().then(appendImagesMarkup);   
+    // console.log(refs.galleryEl.children.length)//к-во загруженных картинок 
+    document.querySelector('.scroll-control').scrollIntoView({ block: "end", behavior: "smooth" });
 }
 
 
-// fetchImg11()
-// function fetchImg11() {
-//         console.log(this)
-//         // const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo`
-//     const url ='pixabay.com/api/?image_type=photo&orientation=horizontal&q=cat&page=1&per_page=12&key=22960570-8de4834e5e1a62c8570402763'
-//         // `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&page=${this.page}&per_page=12`
-//         // https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=что_искать&page=номер_страницы&per_page=12&key=твой_ключ
+function appendImagesMarkup(images) {         
+    refs.galleryEl.insertAdjacentHTML('beforeend', imgTmpl(images));       
+}
 
-//         return fetch(url)
-            
-//             // .then(response => response.json())
+function onRemoveLoadBtn() {
+    refs.loadMoreBtnEl.classList.remove("visually-hidden");
+}
 
-//              .then((response) => {
-//                  if (!response.ok) throw Error(response.status);
-//             console.log(response)     
-//             return response.json();
-//             })
-//             .then(({ images }) => {
-//                 this.incrementPage();
-//                 return images;
-//             })
-        
-//     }
+function onClearGallery() {
+ refs.galleryEl.innerHTML = '';
+}
 
-// function onSearch1() {
-//     e.preventDefault();
+function onSwitchSearchBtn(e) {
+    let inputValue = e.target.value;    
+    if(inputValue === '')
+    refs.searchBtnEl.disabled = false;
+}
 
-//     return fetch('https://pixabay.com/api/?key=22960570-8de4834e5e1a62c8570402763&q=yellow+flowers&image_type=photo')
-//         .then((response) => {
-//                  if (!response.ok) throw Error(response.status);
-//             console.log(response)     
-//             return response.json();
-//             })
-//             .then(({ images }) => {
-//                 this.incrementPage();
-//                 return images;
-//             })
-// }
+function onControlInput(e) {    
+    if ((this.value.length === 0 && e.which === 32)
+        || (e.which >= 96 && e.which <= 105))        
+        e.preventDefault();   
+}
 
-// var API_KEY = '22960570-8de4834e5e1a62c8570402763';
-// var URL = "https://pixabay.com/api/?key="+API_KEY+"&q="+encodeURIComponent('red roses');
-// $.getJSON(URL, function(data){
-// if (parseInt(data.totalHits) > 0)
-//     $.each(data.hits, function(i, hit){ console.log(hit.pageURL); });
-// else
-//     console.log('No hits');
-// });
+function onSearchBtControl() {
+    console.log(imagesApiService.query)
+    if (imagesApiService.query !== '') {
+         refs.searchBtnEl.disabled = false;
+    }
+    refs.searchBtnEl.disabled = true;
+}
 
-// function onSearch(e) {
-//     e.preventDefault();   
-// // console.log(e.currentTarget.creatDomElements.query.value)
-//     imagesApiService.query = e.currentTarget.creatDomElements.query.value;
-//     console.log(imagesApiService.query)
-//     if (imagesApiService.query === '') {
-//          return alert ('input is empty')
-//     }else
-//     {console.log("show444")}
-// }
+function onLoadBtControl() {
+    if (imagesApiService.query !== '' || images.length < 12) {
+         refs.loadMoreBtnEl.classList.add("visually-hidden");
+    }
+    refs.loadMoreBtnEl.classList.remove("visually-hidden");
+}
+
 

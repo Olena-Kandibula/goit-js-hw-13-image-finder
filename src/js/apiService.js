@@ -1,15 +1,6 @@
-// const API_KEY = '22960570-8de4834e5e1a62c8570402763';
-// const BASE_URL = 'https://pixabay.com/api/';
-// const options = {
-//             headers: {
-//         Autorization: '22960570-8de4834e5e1a62c8570402763',
-//         // Mode: 'no-cors',
-//             //    Contant-type: 'application/json',
-//             //    AccessControlAllowOrigin:'*', 
-                
-//                 // Access-Control-Allow-Origin: '22960570-8de4834e5e1a62c8570402763',
-//             }
-//         }
+
+const API_KEY = '22960570-8de4834e5e1a62c8570402763';
+        const BASE_URL = 'https://pixabay.com/api/';
 
 export default class ImgApiService {
     constructor() {
@@ -18,38 +9,21 @@ export default class ImgApiService {
     }
 
     fetchImg() {
-        console.log(this)
-
-        const API_KEY = '22960570-8de4834e5e1a62c8570402763';
-        const BASE_URL = 'https://pixabay.com/api/';
-        // const options = {
-            // headers: {
-        // key: '22960570-8de4834e5e1a62c8570402763',                   
-        // 
-
-            // },
-        // };
+        // console.log(this)        
         
-        // const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&page=${this.page}&per_page=12&fields=id`
-         const url = 'https://pixabay.com/api/?key=22960570-8de4834e5e1a62c8570402763&q=dog&image_type=photo&orientation=horizontal&page=1&per_page=12'
-                
-        // return fetch(url, options)
-            return fetch(url)
+        const url = `${BASE_URL}?key=${API_KEY}&q=${this.searchQuery}&image_type=photo&orientation=horizontal&page=${this.page}&per_page=12`
+        
+        return fetch(url)
             
-            // .then(response => response.json())
-
-             .then((response) => {
-                 if (!response.ok) throw Error(response.status);
-                //  console.log(response)
-                //  console.log(this.page)
-            return response.json();
+            .then(response => 
+                // console.log(response.json())
+                response.json()
+            )
+            .then(( images ) => {             
+                
+                return images.hits;
             })
-            // .then(( images ) => {
-            //     this.incrementPage();
-            //     // console.log(images)
-            //     // console.log(this.page)
-            //     return images;
-            // })
+            .catch(error => console.warn(error));
         
     }
 
